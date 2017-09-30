@@ -1,0 +1,27 @@
+{
+    "name": "dykyi-roman/online-visitors-counter",
+    "minimum-stability": "stable",
+    "type": "library",
+    "description": "Online visitors counter",
+    "keywords": ["visitors", "online"],
+    "homepage": "https://github.com/dykyi-roman",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dykyi Roman",
+            "email": "mr.dukuy@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/dykyi-roman/online-visitors-counter/issues",
+        "source": "https://github.com/dykyi-roman/"
+    },
+    "require": {
+        "php": ">=5.6",
+        "predis/predis": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {"Dykyi\\": "src/"}
+    }
+}
