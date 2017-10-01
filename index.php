@@ -2,10 +2,12 @@
 
 require 'vendor/autoload.php';
 
-$dbFactory = new \Dykyi\DBFactory();
-$dbFactory->setDriver(\Dykyi\Driver\MySQLDB::class);
-$db = $dbFactory->makeDB(['127.0.0.1','homestead','homestead','secret']);
-$repository = $dbFactory->getRepository($db);
-$count = \Dykyi\VisitorsCounter::getCount($repository);
+use Dykyi\Driver\MySQLDB;
+use Dykyi\DBFactory;
+use Dykyi\VisitorsCounter;
 
-echo $count;
+$dbFactory = new DBFactory();
+$dbFactory->setDriver(MySQLDB::class);
+$dataBase   = $dbFactory->makeDB(['127.0.0.1','homestead','homestead','secret']);
+$repository = $dbFactory->getRepository($dataBase);
+echo VisitorsCounter::getCount($repository);

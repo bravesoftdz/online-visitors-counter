@@ -4,10 +4,12 @@ namespace Dykyi\Repository;
 
 /**
  * Interface Repository
- * @package Dykyi
+ * @package Dykyi\Repository
  */
 interface Repository
 {
+    const TABLE_NAME = 'online_visitors';
+
     /**
      * @param $sessionId
      * @return mixed

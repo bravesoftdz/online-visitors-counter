@@ -2,6 +2,10 @@
 
 namespace Dykyi\Repository;
 
+/**
+ * Class RedisRepository
+ * @package Dykyi\Repository
+ */
 class RedisRepository implements Repository
 {
     private $db = null;

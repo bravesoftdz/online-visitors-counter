@@ -3,6 +3,7 @@
 namespace Dykyi\Repository;
 
 use PDO;
+use PDOException;
 
 /**
  * Class PDORepository
@@ -10,6 +11,7 @@ use PDO;
  */
 class PDORepository implements Repository
 {
+    /** @var null|PDO */
     private $pdo = null;
 
     /**
@@ -21,29 +23,68 @@ class PDORepository implements Repository
         $this->pdo = $pdo;
     }
 
+    /**
+     * @param $sessionId
+     * @return bool
+     */
     public function getVisitorBySessionID($sessionId)
     {
-        //$num = mysql_num_rows(mysql_query("SELECT * FROM online_visitors WHERE session_id='{$session_id}' LIMIT 1"));
+        $stmt = $this->pdo->prepare('SELECT count(*) FROM ' . self::TABLE_NAME . ' WHERE session_id = :session_id');
+        $stmt->bindParam(":session_id", $sessionId);
+        $stmt->execute();
+        return $stmt->fetchColumn() > 0;
     }
 
+    /**
+     * @param $sessionId
+     * @param $time
+     * @return bool
+     */
     public function addNewVisitor($sessionId, $time)
     {
-        //"INSERT INTO online_visitors VALUES('{$session_id}','{$time}')";
+        try {
+            $stmt = $this->pdo->prepare("INSERT INTO ". self::TABLE_NAME ." (session_id, time) VALUES (:session_id, :time)");
+            $stmt->bindParam(":session_id", $sessionId);
+            $stmt->bindParam(":time", $time);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            var_dump($stmt->errorInfo());
+        }
+        return false;
     }
 
+    /**
+     * @param $sessionId
+     * @param $time
+     * @return bool
+     */
     public function updateVisitor($sessionId, $time)
     {
-        //"UPDATE online_visitors SET time='{$time}' WHERE session_id='{$session_id}'";
+        $stmt = $this->pdo->prepare('UPDATE ' . self::TABLE_NAME . ' SET time = :time WHERE session_id = :session_id');
+        $stmt->bindParam(":time", $time);
+        $stmt->bindParam(":session_id", $sessionId);
+        return $stmt->execute();
     }
 
+    /**
+     * @param $time
+     * @return mixed
+     */
     public function deleteOfflineVisitors($time)
     {
-        //mysql_query("DELETE FROM online_visitors WHERE time<'{$time_limit}'");
+        $stmt = $this->pdo->prepare('DELETE FROM '. self::TABLE_NAME .' WHERE time < :time');
+        $stmt->bindParam(":time", $time);
+        return $stmt->execute();
     }
 
+    /**
+     * @return int
+     */
     public function getAllVisitors()
     {
-        //  mysql_num_rows(mysql_query("SELECT * FROM online_visitors"));
+        $stmt = $this->pdo->prepare('SELECT count(*) FROM ' . self::TABLE_NAME);
+        $stmt->execute();
+        return $stmt->fetchColumn();
     }
 
 }

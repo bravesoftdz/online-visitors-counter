@@ -46,7 +46,7 @@ class DBFactory
     }
 
     /**
-     * @param $handle
+     * @param PDO|mixed $handle
      * @return PDORepository|RedisRepository
      */
     public function getRepository($handle)
