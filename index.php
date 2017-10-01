@@ -7,7 +7,7 @@ use Dykyi\DBFactory;
 use Dykyi\VisitorsCounter;
 
 $dbFactory = new DBFactory();
-$dbFactory->setDriver(MySQLDB::class);
-$dataBase   = $dbFactory->makeDB(['127.0.0.1','homestead','homestead','secret']);
+$dbFactory->setDriver(\Dykyi\Driver\RedisDB::class);
+$dataBase   = $dbFactory->makeDB(['127.0.0.1','','','']);
 $repository = $dbFactory->getRepository($dataBase);
 echo VisitorsCounter::getCount($repository);

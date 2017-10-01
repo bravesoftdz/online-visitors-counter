@@ -4,6 +4,7 @@ namespace Dykyi;
 
 use Dykyi\Driver\Driver;
 use PDO;
+use Predis\Client;
 use Exception;
 use Dykyi\Repository\PDORepository;
 use Dykyi\Repository\RedisRepository;
@@ -55,6 +56,10 @@ class DBFactory
             return new PDORepository($handle);
         }
 
-        return new RedisRepository($handle);
+        if ($handle instanceof Client){
+            return new RedisRepository($handle);
+        }
+
+        return false;
     }
 }

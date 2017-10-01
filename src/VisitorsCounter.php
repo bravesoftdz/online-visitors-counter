@@ -27,7 +27,6 @@ class VisitorsCounter
 
         // We need to check the session_id is already stored or not
         $num = $repository->getVisitorBySessionID($sessionId);
-
         //if it doesn't exist, then we'll store it And if does exist, we will update the session's time in the DB
         if(!$num){
             $repository->addNewVisitor($sessionId, $time);
@@ -41,6 +40,9 @@ class VisitorsCounter
         //Now, check if the session was stored for more than n-minutes and delete it if it is.
         $repository->deleteOfflineVisitors($timeLimit);
 
-        return empty($count) ? 0 : $count;
+        // close connect to DB
+        $repository->close();
+
+        return empty($count) ? 0 : count($count);
     }
 }

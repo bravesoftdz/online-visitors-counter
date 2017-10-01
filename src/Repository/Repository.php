@@ -40,4 +40,6 @@ interface Repository
      * @return mixed
      */
     public function getAllVisitors();
+
+    public function close();
 }

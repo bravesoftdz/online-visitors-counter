@@ -5,8 +5,7 @@ namespace Dykyi;
 use Dykyi\Driver\RedisDB;
 use PDO;
 use Dykyi\Driver\MySQLDB;
-use Dykyi\DBFactory;
-use Dykyi\VisitorsCounter;
+use Predis\Client;
 
 /**
  * Class OnlineVisitorsTest
@@ -18,9 +17,9 @@ class OnlineVisitorsTest extends PHPUnit_Framework_TestCase
     {
         $dbFactory = new DBFactory();
         $dbFactory->setDriver(RedisDB::class);
-//        $dataBase   = $dbFactory->makeDB(['127.0.0.1','homestead','homestead','secret']);
-//        $repository = $dbFactory->getRepository($dataBase);
-        $this->assertTrue(true);
+        $dataBase   = $dbFactory->makeDB(['127.0.0.1','','','']);
+        $repository = $dbFactory->getRepository($dataBase);
+        $this->assertTrue($repository instanceof Client);
     }
 
     public function testMySQLDriver()

@@ -69,6 +69,11 @@ abstract class Driver
         return $this->host;
     }
 
+    protected function close()
+    {
+        //...
+    }
+
     /**
      * @return mixed
      */

@@ -2,12 +2,18 @@
 
 namespace Dykyi\Repository;
 
+use Predis\Client;
+use Predis\Collection\Iterator\HashKey;
+
 /**
  * Class RedisRepository
  * @package Dykyi\Repository
  */
 class RedisRepository implements Repository
 {
+    const REDIS_KEY = 'VISITORS';
+
+    /** @var Client */
     private $db = null;
 
     /**
@@ -19,29 +25,67 @@ class RedisRepository implements Repository
         $this->db  = $db;
     }
 
-
+    /**
+     * @param $sessionId
+     * @return mixed
+     */
     public function getVisitorBySessionID($sessionId)
     {
-        //$num = mysql_num_rows(mysql_query("SELECT * FROM online_visitors WHERE session_id='{$session_id}' LIMIT 1"));
+        return $this->db->hget(self::REDIS_KEY, $sessionId);
     }
 
+    /**
+     * @param $sessionId
+     * @param $time
+     * @return mixed
+     */
     public function addNewVisitor($sessionId, $time)
     {
-        //"INSERT INTO online_visitors VALUES('{$session_id}','{$time}')";
+        return $this->db->hset(self::REDIS_KEY, $sessionId, $time);
     }
 
+    /**
+     * @param $sessionId
+     * @param $time
+     * @return mixed
+     */
     public function updateVisitor($sessionId, $time)
     {
-        //"UPDATE online_visitors SET time='{$time}' WHERE session_id='{$session_id}'";
+        return $this->db->hset(self::REDIS_KEY, $sessionId, $time);
     }
 
+    /**
+     * @param $time
+     * @return int
+     */
     public function deleteOfflineVisitors($time)
     {
-        //mysql_query("DELETE FROM online_visitors WHERE time<'{$time_limit}'");
+        $fields = [];
+        $it = new HashKey($this->db, self::REDIS_KEY);
+        foreach($it as $sessionId => $value){
+            if ($value < $time){
+                $fields[] = $sessionId;
+            }
+        }
+
+        if (!empty($fields))
+        {
+            $this->db->hdel(self::REDIS_KEY, $fields);
+        }
+
+        return true;
     }
 
+    /**
+     * @return array
+     */
     public function getAllVisitors()
     {
-        //  mysql_num_rows(mysql_query("SELECT * FROM online_visitors"));
+        return $this->db->hgetall(self::REDIS_KEY);
+    }
+
+    public function close()
+    {
+        $this->db->disconnect();
     }
 }

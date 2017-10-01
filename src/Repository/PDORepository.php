@@ -87,4 +87,8 @@ class PDORepository implements Repository
         return $stmt->fetchColumn();
     }
 
+    public function close()
+    {
+        // TODO: Implement close() method.
+    }
 }
