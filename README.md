@@ -8,6 +8,7 @@ CREATE TABLE online_visitors(
 	time INT(11) NOT NULL DEFAULT '0'
 );
 ```
+or use Redis.
 
 2) We are checking if the session has been already started, if it's not, then start the session
 
@@ -28,7 +29,7 @@ The preferred way to install this extension is through [Composer](http://getcomp
 Either run
 
 ```
-php composer.phar require dykyi-roman/online-visitors-counter "dev-master"
+composer require dykyi-roman/online-visitors-counter "dev-master"
 ```
 
 or add
@@ -39,8 +40,15 @@ or add
 
 to the require section of your ```composer.json```
 
-## Usage
+## Driver Support
++ Redis
++ Mysql
 
+## Plans for the future
++ Support MSSQL Driver
++ Support Memcached Driver
+
+## Usage
 ```php
 use Dykyi\Driver\MySQLDB;
 use Dykyi\DBFactory;
